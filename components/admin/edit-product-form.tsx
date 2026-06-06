@@ -31,6 +31,7 @@ export default function EditProductForm({ initialData }: EditProductFormProps) {
       price: Number(initialData.price),
       category: initialData.category,
       image: initialData.image || "",
+      stock: initialData.stock, // NEW: Added stock to default values!
     },
   });
 
@@ -108,8 +109,8 @@ export default function EditProductForm({ initialData }: EditProductFormProps) {
           )}
         />
 
-        {/* Price & Category Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Price, Category & Stock Grid - Changed to grid-cols-3 */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Controller
             name="price"
             control={form.control}
@@ -138,6 +139,27 @@ export default function EditProductForm({ initialData }: EditProductFormProps) {
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
                 <Input {...field} id="category" aria-invalid={fieldState.invalid} />
+                {fieldState.error && (
+                  <p className="text-sm text-destructive">{fieldState.error.message}</p>
+                )}
+              </div>
+            )}
+          />
+
+          {/* NEW: Stock Input */}
+          <Controller
+            name="stock"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <div className="space-y-2">
+                <Label htmlFor="stock">Stock</Label>
+                <Input
+                  {...field}
+                  id="stock"
+                  type="number"
+                  aria-invalid={fieldState.invalid}
+                  onChange={(e) => field.onChange(parseInt(e.target.value, 10) || 0)}
+                />
                 {fieldState.error && (
                   <p className="text-sm text-destructive">{fieldState.error.message}</p>
                 )}

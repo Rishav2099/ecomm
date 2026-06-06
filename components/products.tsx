@@ -21,8 +21,15 @@ const Products = ({ products }: { products: SerializedProduct[] }) => {
       {products.map((product) => (
         <Card
           key={product.id}
-          className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card/50 backdrop-blur-sm border-border/50 py-0"
+          className="group relative flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card/50 backdrop-blur-sm border-border/50 py-0"
         >
+          {/* THE MAGIC TRICK: This link stretches over the whole card */}
+          <Link 
+            href={`/product/${product.id}`} 
+            className="absolute inset-0 z-10"
+            aria-label={`View details for ${product.name}`}
+          />
+
           {/* Image Container */}
           <div className="relative aspect-square w-full overflow-hidden bg-muted flex-shrink-0">
             <Image
@@ -61,16 +68,22 @@ const Products = ({ products }: { products: SerializedProduct[] }) => {
             </div>
           </CardContent>
 
-          <CardFooter className="p-5 grid grid-cols-2 gap-2 flex-shrink-0">
-          
-            <div className="[&>button]:w-full [&>button]:h-10 [&>button]:text-sm [&>button]:px-2">
-              {/* @ts-ignore - Quick bypass if AddToCartButton strictly expects Prisma Decimal */}
+          {/* UPDATED: Swapped 'grid' for 'flex flex-wrap'. 
+            This allows the buttons to stack automatically ONLY when the card gets too narrow! 
+          */}
+          <CardFooter className="relative z-20 p-5 flex flex-wrap gap-2 flex-shrink-0">
+            
+            {/* flex-1 makes it stretch, min-w-[180px] ensures the quantity selector has room to breathe */}
+            <div className="flex-1 min-w-[180px] [&>div]:w-full [&>button]:h-10 [&>button]:text-sm">
+              {/* @ts-ignore */}
               <AddToCartButton product={product} />
             </div>
 
-            <Button variant="secondary" className="w-full h-10 text-sm" asChild>
-              <Link href={`/product/${product.id}`}>Details</Link>
+            {/* min-w-[100px] ensures this button doesn't get squished into nothing */}
+            <Button variant="secondary" className="flex-1 min-w-[100px] h-10 text-sm">
+              Details
             </Button>
+            
           </CardFooter>
         </Card>
       ))}

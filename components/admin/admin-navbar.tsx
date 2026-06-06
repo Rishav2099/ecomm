@@ -63,7 +63,6 @@ export function AdminNavbar() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[240px] sm:w-[300px]">
-                {/* Title for screen readers (required by Shadcn accessibility) */}
                 <SheetTitle className="sr-only">Admin Navigation</SheetTitle>
                 
                 <div className="flex items-center space-x-2 border-b pb-6 pt-2">
@@ -73,7 +72,11 @@ export function AdminNavbar() {
                 
                 <nav className="flex flex-col gap-2 mt-6">
                   {navItems.map((item) => {
-                    const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                    // THE FIX: Exact match for root dashboard, startsWith for the rest
+                    const isActive = item.href === "/admin" 
+                      ? pathname === item.href 
+                      : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                    
                     return (
                       <Link
                         key={item.href}
@@ -106,7 +109,10 @@ export function AdminNavbar() {
             {/* Desktop Navigation (Hidden on sm-) */}
             <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
               {navItems.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                // THE FIX: Exact match for root dashboard, startsWith for the rest
+                const isActive = item.href === "/admin" 
+                  ? pathname === item.href 
+                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
                 
                 return (
                   <Link

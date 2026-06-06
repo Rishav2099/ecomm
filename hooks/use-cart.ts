@@ -1,63 +1,58 @@
-import { Product } from "@/generated/prisma/client";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
-interface CartItem {
-  product: Product;
+export interface CartItem {
+  product: any;
   quantity: number;
 }
 
 interface CartStore {
   items: CartItem[];
-  addItem: (product: Product, quantity?: number) => void;
+  // Updated addItem to accept a quantity parameter
+  addItem: (product: any, quantity?: number) => void;
   removeItem: (productId: number) => void;
+  // NEW: Function to handle + / - buttons
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       items: [],
       
-      addItem: (product: Product, quantity = 1) => {
-        const currentItems = get().items;
-        const existingItem = currentItems.find((i) => i.product.id === product.id);
+      addItem: (product, quantity = 1) =>
+        set((state) => {
+          const existingItem = state.items.find((item) => item.product.id === product.id);
+          if (existingItem) {
+            return {
+              items: state.items.map((item) =>
+                item.product.id === product.id
+                  ? { ...item, quantity: item.quantity + quantity }
+                  : item
+              ),
+            };
+          }
+          return { items: [...state.items, { product, quantity }] };
+        }),
 
-        if (existingItem) {
-          // If it exists, just increase the quantity
-          set({
-            items: currentItems.map((i) =>
-              i.product.id === product.id
-                ? { ...i, quantity: i.quantity + quantity }
-                : i
-            ),
-          });
-        } else {
-          // Otherwise, add the new item
-          set({ items: [...currentItems, { product, quantity }] });
-        }
-      },
+      removeItem: (productId) =>
+        set((state) => ({
+          items: state.items.filter((item) => item.product.id !== productId),
+        })),
 
-      removeItem: (productId: number) => {
-        set({
-          items: [...get().items.filter((i) => i.product.id !== productId)],
-        });
-      },
-
-      updateQuantity: (productId: number, quantity: number) => {
-        set({
-          items: get().items.map((i) =>
-            i.product.id === productId ? { ...i, quantity } : i
-          ),
-        });
-      },
+      // NEW: Updates the specific item's quantity, or removes it if quantity hits 0
+      updateQuantity: (productId, quantity) =>
+        set((state) => ({
+          items: quantity <= 0
+            ? state.items.filter((item) => item.product.id !== productId)
+            : state.items.map((item) =>
+                item.product.id === productId ? { ...item, quantity } : item
+              ),
+        })),
 
       clearCart: () => set({ items: [] }),
     }),
-    {
-      name: "ecomm-cart-storage", // The name of the key in localStorage
-      storage: createJSONStorage(() => localStorage),
-    }
+    { name: "cart-storage" }
   )
 );

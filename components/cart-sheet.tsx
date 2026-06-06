@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCart, Trash2 } from "lucide-react";
+import { ShoppingCart, Trash2, Plus, Minus } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -17,7 +17,9 @@ import { useState, useEffect } from "react";
 export function CartSheet() {
   // Prevent hydration mismatch errors by waiting for the component to mount
   const [isMounted, setIsMounted] = useState(false);
-  const { items, removeItem } = useCartStore();
+  
+  // NEW: Added updateQuantity from the store
+  const { items, removeItem, updateQuantity } = useCartStore();
 
   useEffect(() => {
     setIsMounted(true);
@@ -74,14 +76,38 @@ export function CartSheet() {
                   <div className="flex justify-between gap-4">
                     <div className="space-y-1">
                       <h3 className="font-medium line-clamp-1">{item.product.name}</h3>
-                      <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                      {/* Show the individual item price for clarity */}
+                      <p className="text-sm text-muted-foreground">
+                        ₹{Number(item.product.price).toLocaleString("en-IN")} each
+                      </p>
                     </div>
                     <p className="font-medium whitespace-nowrap">
                       ₹{(Number(item.product.price) * item.quantity).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </p>
                   </div>
                   
-                  <div className="flex mt-2">
+                  <div className="flex mt-3 items-center justify-between w-full">
+                    
+                    {/* NEW: Interactive Quantity Selector */}
+                    <div className="flex items-center border rounded-md h-8 border-input bg-background">
+                      <button
+                        onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                        className="px-2 h-full hover:bg-muted transition-colors rounded-l-md text-muted-foreground"
+                      >
+                        <Minus className="h-3 w-3" />
+                      </button>
+                      <span className="text-xs font-medium w-8 text-center">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                        disabled={item.quantity >= item.product.stock}
+                        className="px-2 h-full hover:bg-muted transition-colors rounded-r-md text-muted-foreground disabled:opacity-50"
+                      >
+                        <Plus className="h-3 w-3" />
+                      </button>
+                    </div>
+
                     <button
                       onClick={() => removeItem(item.product.id)}
                       className="text-sm text-destructive hover:underline flex items-center gap-1 transition-all"

@@ -10,8 +10,10 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { createStripeSession } from "@/actions/order/stripe-checkout";
+import { requireAuth } from "@/lib/auth-utils";
 
-export default function CheckoutPage() {
+export default async function CheckoutPage() {
+  await requireAuth();
   const [isMounted, setIsMounted] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const { items, clearCart } = useCartStore();
@@ -105,20 +107,6 @@ export default function CheckoutPage() {
                   <Label htmlFor="postalCode">Postal Code</Label>
                   <Input id="postalCode" required disabled={isProcessing} />
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Payment Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="p-4 border rounded-lg bg-muted/50 text-sm text-muted-foreground flex items-center gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary" />
-                This is a simulated checkout. Payment integration (e.g., Stripe,
-                Razorpay) would go here. For now, simply submit to finalize the
-                order.
               </div>
             </CardContent>
           </Card>

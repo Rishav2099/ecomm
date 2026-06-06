@@ -12,7 +12,6 @@ export default function CartPage() {
   const [isMounted, setIsMounted] = useState(false);
   const { items, removeItem, updateQuantity } = useCartStore();
 
-  // Prevent hydration errors
   useEffect(() => {
     setIsMounted(true);
   }, []);

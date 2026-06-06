@@ -16,7 +16,6 @@ function SuccessContent() {
 
   useEffect(() => {
     setIsMounted(true);
-    // Clear the cart when they land on the success page
     if (sessionId) {
       clearCart();
     }

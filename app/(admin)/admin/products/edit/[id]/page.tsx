@@ -16,7 +16,6 @@ export default async function EditProductPage({ params }: EditPageProps) {
     notFound();
   }
 
-  // Fetch data dynamically on the server
   const product = await prisma.product.findUnique({
     where: { id: productId },
   });

@@ -10,7 +10,6 @@ import { SignOutButton } from "@/components/sign-out-button";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-// Helper function to color-code order statuses
 function getStatusBadge(status: string) {
   switch (status.toUpperCase()) {
     case "PENDING":
@@ -107,7 +106,6 @@ export default async function ProfilePage() {
           </div>
         </div>
 
-        {/* Drop in the new Client Component */}
         <SignOutButton />
       </div>
 
@@ -146,7 +144,6 @@ export default async function ProfilePage() {
 
               return (
                 <Card key={order.id} className="overflow-hidden shadow-sm py-0">
-                  {/* Order Header */}
                   <CardHeader className="bg-muted/40 border-b py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-3">

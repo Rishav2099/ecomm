@@ -12,26 +12,21 @@ export default async function ProductPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // Await the dynamic params (Required in Next.js 15)
   const resolvedParams = await params;
   const productId = parseInt(resolvedParams.id, 10);
 
-  // If the ID in the URL isn't a valid number, show a 404 page
   if (isNaN(productId)) {
     notFound();
   }
 
-  // Fetch the specific product
   const product = await prisma.product.findUnique({
     where: { id: productId },
   });
 
-  // If the product doesn't exist in the database, show a 404 page
   if (!product) {
     notFound();
   }
 
-  // Serialize the product to fix the Prisma Decimal issue
   const serializedProduct = {
     ...product,
     price: Number(product.price),
@@ -55,7 +50,7 @@ export default async function ProductPage({
             alt={product.name}
             fill
             className="object-cover"
-            priority // Loads this image immediately
+            priority 
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>

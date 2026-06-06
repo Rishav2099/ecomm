@@ -20,10 +20,6 @@ export default async function ProductsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Responsive Header: 
-        Uses flex-col on mobile to stack the title and button, 
-        and flex-row on larger screens (sm:) to place them side-by-side. 
-      */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Products</h2>
@@ -39,19 +35,15 @@ export default async function ProductsPage() {
         </Button>
       </div>
 
-      {/* Modern Data Container */}
       <div className="rounded-xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden">
-        {/* overflow-x-auto ensures the table can be swiped horizontally if it overflows */}
         <div className="overflow-x-auto">
           <Table className="min-w-[600px] sm:min-w-full">
             <TableHeader className="bg-muted/40">
               <TableRow>
-                {/* Image hidden on mobile, visible on sm+ screens */}
                 <TableHead className="w-[80px] sm:w-[100px] hidden sm:table-cell">
                   Image
                 </TableHead>
                 <TableHead>Name</TableHead>
-                {/* Category hidden on mobile/tablet, visible on md+ screens */}
                 <TableHead className="hidden md:table-cell">Category</TableHead>
                 <TableHead className="text-center w-[100px]">Stock</TableHead>
                 <TableHead className="text-right">Price</TableHead>
@@ -79,7 +71,6 @@ export default async function ProductsPage() {
                     key={product.id}
                     className="hover:bg-muted/30 transition-colors"
                   >
-                    {/* Responsive Image Cell */}
                     <TableCell className="table-cell">
                       <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-muted flex items-center justify-center overflow-hidden border border-border shrink-0">
                         {product.image ? (
@@ -96,19 +87,16 @@ export default async function ProductsPage() {
                       </div>
                     </TableCell>
 
-                    {/* Truncated Name Cell to prevent layout breaking */}
                     <TableCell className="font-medium max-w-[140px] sm:max-w-[200px] truncate">
                       {product.name}
                     </TableCell>
 
-                    {/* Responsive Category Cell */}
                     <TableCell className="hidden md:table-cell">
                       <span className="inline-flex items-center rounded-md bg-secondary px-2.5 py-0.5 text-xs font-medium capitalize border border-border">
                         {product.category}
                       </span>
                     </TableCell>
 
-                    {/* Inline Stock Editor */}
                     <TableCell>
                       <div className="flex justify-center">
                         <StockUpdater

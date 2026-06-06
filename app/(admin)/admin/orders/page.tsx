@@ -32,7 +32,6 @@ export default async function OrdersPage() {
                   <TableCell>{order.user.name}</TableCell>
                   <TableCell>₹{total.toFixed(2)}</TableCell>
                   <TableCell>
-                    {/* Drop in the new client component */}
                     <OrderStatusUpdater
                       orderId={order.id} 
                       currentStatus={order.status} 

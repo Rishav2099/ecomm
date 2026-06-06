@@ -12,16 +12,13 @@ export async function createStripeSession(cartItems: any[]) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) throw new Error("Unauthorized");
 
-  // 1. Fetch real prices from DB to prevent client spoofing
   const productIds = cartItems.map((item) => item.productId);
 
   const realProducts = await prisma.product.findMany({
     where: { id: { in: productIds } },
   });
 
-  // 2. Format Line Items for Stripe
   const line_items = cartItems.map((cartItem) => {
-    // FIX: Changed cartItem.product.id to cartItem.productId
     const realProduct = realProducts.find((p) => p.id === cartItem.productId);
 
     if (!realProduct) {
@@ -35,13 +32,12 @@ export async function createStripeSession(cartItems: any[]) {
           name: realProduct.name,
           images: [realProduct.image || ""],
         },
-        unit_amount: Math.round(Number(realProduct.price) * 100), // Stripe expects cents/paise
+        unit_amount: Math.round(Number(realProduct.price) * 100),
       },
       quantity: cartItem.quantity,
     };
   });
 
-  // 3. Create the Stripe Session
   const stripeSession = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items,

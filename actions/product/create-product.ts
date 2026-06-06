@@ -12,10 +12,10 @@ export async function createProduct(values: unknown) {
     return { error: "Invalid data" };
   }
 
-  const { name, description, price, category, image } = parsed.data;
+  const { name, description, price, category, image, stock } = parsed.data;
 
   await prisma.product.create({
-    data: { name, description, price, category, image },
+    data: { name, description, price, category, image, stock },
   });
 
   return { success: true };

@@ -50,7 +50,21 @@ export async function POST(req: Request) {
           },
         });
         
-        console.log("Order created successfully from Stripe Webhook!");
+        // ==========================================
+        // NEW: 4.5 Deduct the inventory stock securely
+        // ==========================================
+        for (const item of items) {
+          await prisma.product.update({
+            where: { id: item.id },
+            data: {
+              stock: {
+                decrement: item.qty, // Safely subtracts the exact purchased amount
+              },
+            },
+          });
+        }
+        
+        console.log("Order created and inventory updated successfully from Stripe Webhook!");
       } catch (error) {
         console.error("Database error during webhook processing:", error);
         return new NextResponse("Database Error", { status: 500 });

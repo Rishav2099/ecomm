@@ -19,6 +19,7 @@ export const productSchema = z.object({
   price: z.number().positive("Price must be greater than 0"),
   category: z.string().min(1, "Category is required"),
   image: z.string().url("Please upload an image"),
+  stock: z.number().min(0, "Stock cannot be negative"),
 });
 
 export type ProductSchemaType = z.infer<typeof productSchema>;
@@ -34,6 +35,7 @@ const NewProduct = () => {
       price: 0,
       category: "",
       image: "",
+      stock: 10,
     },
   });
 
@@ -54,7 +56,6 @@ const NewProduct = () => {
     <div>
       <Card className="p-8">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-
           {/* Image Upload */}
           <div className="space-y-2">
             <Label>Product Image</Label>
@@ -152,6 +153,30 @@ const NewProduct = () => {
             )}
           />
 
+          {/* Stock */}
+          <Controller
+            name="stock"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <div className="space-y-2">
+                <Label htmlFor="stock">Inventory Stock</Label>
+                <Input
+                  {...field}
+                  id="stock"
+                  type="number"
+                  placeholder="10"
+                  aria-invalid={fieldState.invalid}
+                  onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
+                />
+                {fieldState.error && (
+                  <p className="text-sm text-destructive">
+                    {fieldState.error.message}
+                  </p>
+                )}
+              </div>
+            )}
+          />
+
           {/* Category */}
           <Controller
             name="category"
@@ -178,7 +203,6 @@ const NewProduct = () => {
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? "Adding Product..." : "Add Product"}
           </Button>
-
         </form>
       </Card>
     </div>

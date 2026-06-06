@@ -6,6 +6,7 @@ export const productSchema = z.object({
   price: z.number().positive("Price must be greater than 0"),
   category: z.string().min(1, "Category is required"),
   image: z.string().url("Please upload an image"),
+  stock: z.number().min(0, 'Stock cannot be negative"')
 });
 
 export type ProductSchemaType = z.infer<typeof productSchema>;

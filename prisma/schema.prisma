@@ -83,6 +83,7 @@ model Product {
   image       String?
   description String?
   price       Decimal @db.Decimal(10, 2)
+  stock       Int     @default(10)
 
   category String
 

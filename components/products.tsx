@@ -24,8 +24,8 @@ const Products = ({ products }: { products: SerializedProduct[] }) => {
           className="group relative flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card/50 backdrop-blur-sm border-border/50 py-0"
         >
           {/* THE MAGIC TRICK: This link stretches over the whole card */}
-          <Link 
-            href={`/product/${product.id}`} 
+          <Link
+            href={`/product/${product.id}`}
             className="absolute inset-0 z-10"
             aria-label={`View details for ${product.name}`}
           />
@@ -49,7 +49,8 @@ const Products = ({ products }: { products: SerializedProduct[] }) => {
               </h2>
             </div>
             <p className="text-2xl font-bold text-primary tracking-tight">
-              ₹{product.price.toLocaleString("en-IN", {
+              ₹
+              {product.price.toLocaleString("en-IN", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -62,7 +63,10 @@ const Products = ({ products }: { products: SerializedProduct[] }) => {
             </p>
 
             <div className="mt-auto pt-2">
-              <Badge variant="secondary" className="px-3 py-1 font-medium capitalize">
+              <Badge
+                variant="secondary"
+                className="px-3 py-1 font-medium capitalize"
+              >
                 {product.category}
               </Badge>
             </div>
@@ -72,7 +76,6 @@ const Products = ({ products }: { products: SerializedProduct[] }) => {
             This allows the buttons to stack automatically ONLY when the card gets too narrow! 
           */}
           <CardFooter className="relative z-20 p-5 flex flex-wrap gap-2 flex-shrink-0">
-            
             {/* flex-1 makes it stretch, min-w-[180px] ensures the quantity selector has room to breathe */}
             <div className="flex-1 min-w-[180px] [&>div]:w-full [&>button]:h-10 [&>button]:text-sm">
               {/* @ts-ignore */}
@@ -80,10 +83,14 @@ const Products = ({ products }: { products: SerializedProduct[] }) => {
             </div>
 
             {/* min-w-[100px] ensures this button doesn't get squished into nothing */}
-            <Button variant="secondary" className="flex-1 min-w-[100px] h-10 text-sm">
-              Details
-            </Button>
-            
+            <Link href={`/product/${product.id}`}>
+              <Button
+                variant="secondary"
+                className="flex-1 min-w-[100px] h-10 text-sm"
+              >
+                Details
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
       ))}

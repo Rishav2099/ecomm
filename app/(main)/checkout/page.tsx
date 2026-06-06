@@ -51,7 +51,7 @@ export default function CheckoutPage() {
         // Redirect the user to Stripe's secure payment page!
         window.location.href = response.url;
       } else {
-        toast.error(response.error || "Failed to initialize payment");
+        toast.error("Failed to initialize payment");
         setIsProcessing(false);
       }
     } catch (error) {

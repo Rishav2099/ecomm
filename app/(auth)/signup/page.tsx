@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const formSchema = z.object({
   name: z.string(),
@@ -153,12 +154,12 @@ const page = () => {
             {isPending ? "Signing Up..." : "Sign Up"}
           </Button>
 
-          <p className="text-center text-sm text-muted-foreground">
+          <Link href={'/login'} className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <span className="cursor-pointer text-primary hover:underline">
-              Sign In
+              Log In
             </span>
-          </p>
+          </Link>
         </form>
       </div>
     </div>

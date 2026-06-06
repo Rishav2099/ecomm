@@ -1,7 +1,6 @@
+import { OrderStatusUpdater } from "@/components/admin/order-status-updater";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { prisma } from "@/lib/prisma";
-import { updateOrderStatus } from "@/actions/order/update-status";
 
 export default async function OrdersPage() {
   const orders = await prisma.order.findMany({
@@ -33,26 +32,11 @@ export default async function OrdersPage() {
                   <TableCell>{order.user.name}</TableCell>
                   <TableCell>₹{total.toFixed(2)}</TableCell>
                   <TableCell>
-                    {/* Server Action Form Wrapper */}
-                    <form action={async (formData) => {
-                      "use server";
-                      const status = formData.get("status") as string;
-                      await updateOrderStatus(order.id, status);
-                    }}>
-                      <Select name="status" defaultValue={order.status}>
-                        <SelectTrigger className="w-[140px] h-8">
-                          <SelectValue placeholder="Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="PENDING">Pending</SelectItem>
-                          <SelectItem value="PROCESSING">Processing</SelectItem>
-                          <SelectItem value="SHIPPED">Shipped</SelectItem>
-                          <SelectItem value="DELIVERED">Delivered</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {/* Hidden submit button triggered by JS or manual enter */}
-                      <button type="submit" className="hidden" id={`submit-${order.id}`}>Save</button>
-                    </form>
+                    {/* Drop in the new client component */}
+                    <OrderStatusUpdater
+                      orderId={order.id} 
+                      currentStatus={order.status} 
+                    />
                   </TableCell>
                 </TableRow>
               );

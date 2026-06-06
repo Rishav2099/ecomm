@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.email({ message: "Invalid email address" }),
@@ -130,12 +131,12 @@ const page = () => {
             {isPending ? "Signing In..." : "Sign In"}
           </Button>
 
-          <p className="text-center text-sm text-muted-foreground">
+          <Link href={'/signup'} className="text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
             <span className="cursor-pointer text-primary hover:underline">
               Sign Up
             </span>
-          </p>
+          </Link>
         </form>
       </div>
     </div>
